@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Finances</string>
+    <string name="action_settings">Settings</string>
+    <string name="et_incoming">Incoming</string>
+    <string name="rb_spent">spent</string>
+    <string name="rb_gain">gain</string>
+    <string name="btn_remove">Remove</string>
+    <string name="btn_incoming">Incoming</string>
+    <string name="tvDate">2019/07/09 13:24</string>
+    <string name="tv_type_of_Incoming">Type of Incoming:</string>
+    <string name="title_activity_incoming">IncomingActivity</string>
+</resources>
