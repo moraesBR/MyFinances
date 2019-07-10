@@ -34,7 +34,8 @@
                     android:id="@+id/tilValues"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    >
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/etIncoming"
@@ -42,7 +43,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:hint="@string/et_incoming"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,6 +73,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:checked="false"
                             android:text="@string/rb_gain" />
 
                         <RadioButton
@@ -79,13 +81,14 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-
+                            android:checked="false"
                             android:text="@string/rb_spent" />
                     </RadioGroup>
 
                 </LinearLayout>
 
                 <CalendarView
+                    android:id="@+id/cvDate"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contextClickable="true">
@@ -101,6 +104,7 @@
                     >
 
                     <Button
+                        android:id="@+id/btnIncoming"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/colorPrimaryDark"

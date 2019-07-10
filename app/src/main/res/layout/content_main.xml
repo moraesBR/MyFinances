@@ -9,10 +9,11 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main"
     android:orientation="vertical"
+    android:layout_margin="12dp"
     >
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/loading"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,13 +27,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="wrap_content">
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Incoming"
+                    style="@style/TextAppearance.AppCompat.Large"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvIncoming"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 />
 
         </LinearLayout>

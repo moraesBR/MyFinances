@@ -1,18 +1,47 @@
 package senac.myfinances;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+import senac.myfinances.adapters.FinanceAdapter;
+import senac.myfinances.models.Finance;
+import senac.myfinances.models.FinanceDB;
+
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Finance>> {
+
+    static List<Finance> finances = new ArrayList<Finance>();
+    static FinanceDB financeDB;
+
+    static FinanceAdapter financeAdapter;
+    private RecyclerView rvIncoming;
+
+    ProgressBar loading;
+    LoaderManager loaderManager;
+
+    public static final int OPERATION_SEARCH_LOADER = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,15 +50,88 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (financeDB == null) {
+            financeDB = new FinanceDB(this);
+        }
+
+        loaderManager = getSupportLoaderManager();
+
+        loading = findViewById(R.id.loading);
+        rvIncoming = findViewById(R.id.rvIncoming);
+
+        RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
+                RecyclerView.VERTICAL, false);
+
+        rvIncoming.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        rvIncoming.setLayoutManager(layout);
+
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent novaFinance = new Intent(getBaseContext(), IncomingActivity.class);
+                startActivity(novaFinance);
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Loader<List<Finance>> loader = loaderManager.getLoader(OPERATION_SEARCH_LOADER);
+
+        if (loader == null) {
+            loaderManager.initLoader(OPERATION_SEARCH_LOADER, null, MainActivity.this);
+        } else {
+            loaderManager.restartLoader(OPERATION_SEARCH_LOADER, null, MainActivity.this);
+        }
+    }
+
+    @NonNull
+    @Override
+    public Loader<List<Finance>> onCreateLoader (int id, @Nullable Bundle args) {
+        return new AsyncTaskLoader<List<Finance>>(this) {
+            @Nullable
+            @Override
+            public List<Finance> loadInBackground() {
+                List<Finance> listFinance = null;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    listFinance = financeDB.select();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return listFinance;
+            }
+
+            @Override
+            protected void onStartLoading() {
+                loading.setVisibility(View.VISIBLE);
+                forceLoad();
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<Finance>> loader, List<Finance> data) {
+        loading.setVisibility(View.GONE);
+
+        rvIncoming.setAdapter(new FinanceAdapter(data, this));
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<Finance>> loader) {
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
