@@ -84,4 +84,5 @@ public class FinanceDB extends SQLiteOpenHelper {
         db.close();
         return finances;
     }
+
 }
