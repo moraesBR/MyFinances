@@ -16,7 +16,13 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import java.security.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalField;
 import java.util.Calendar;
 
 import senac.myfinances.models.Finance;
@@ -40,16 +46,16 @@ public class IncomingActivity extends AppCompatActivity {
 
         btn = findViewById(R.id.btnIncoming);
         etIncoming = findViewById(R.id.etIncoming);
+        rbGain = findViewById(R.id.rbGain);
         cvDate = findViewById(R.id.cvDate);
-        cvDate.setDate(Calendar.getInstance().getTimeInMillis(),false,true);
 
         cvDate.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
-                date = LocalDate.of(i,i1,i2);
+            public void onSelectedDayChange(CalendarView calendarView, int year, int month, int dayofMonth) {
+                date = LocalDate.of(year,(month+1),dayofMonth);
+                Log.e("Date",LocalDate.of(year,month+1,dayofMonth).toString());
             }
         });
-
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,13 +16,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import senac.myfinances.adapters.FinanceAdapter;
@@ -32,12 +30,8 @@ import senac.myfinances.models.FinanceDB;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Finance>> {
 
-    static List<Finance> finances = new ArrayList<Finance>();
     static FinanceDB financeDB;
-
-    static FinanceAdapter financeAdapter;
     private RecyclerView rvIncoming;
-
     ProgressBar loading;
     LoaderManager loaderManager;
 
@@ -100,13 +94,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public List<Finance> loadInBackground() {
                 List<Finance> listFinance = null;
                 try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
                     listFinance = financeDB.select();
                 } catch (Exception e) {
+                    Log.e("listFinance",e.getMessage());
                     e.printStackTrace();
                 }
                 return listFinance;

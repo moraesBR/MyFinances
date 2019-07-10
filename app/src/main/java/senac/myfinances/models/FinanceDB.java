@@ -45,7 +45,7 @@ public class FinanceDB extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         values = new ContentValues();
-        values.put("dia", finance.getData().format(DateTimeFormatter.ofPattern("YYYY-MM-dd kk:mm")));
+        values.put("dia", finance.getData().format(DateTimeFormatter.ofPattern("YYYY-MM-dd")));
         values.put("tipo", finance.getType().toString());
         values.put("valor", finance.getIncoming());
 
@@ -67,7 +67,7 @@ public class FinanceDB extends SQLiteOpenHelper {
         cursor = db.query("TB_FINANCE", campos, null, null,
                 null, null, null, null);
 
-        List<Finance> finances = new LinkedList<>();
+        List<Finance> finances = new LinkedList<Finance>();
 
         if (cursor != null) {
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
@@ -75,7 +75,7 @@ public class FinanceDB extends SQLiteOpenHelper {
                         cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getDouble(cursor.getColumnIndex("valor")),
                         SpendType.valueOf(cursor.getString(cursor.getColumnIndex("tipo"))),
-                        LocalDate.parse(cursor.getString(cursor.getColumnIndex("dia")),DateTimeFormatter.ofPattern("YYYY-MM-dd kk:mm"))
+                        LocalDate.parse(cursor.getString(cursor.getColumnIndex("dia")))
 
                 ));
             }

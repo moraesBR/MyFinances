@@ -50,11 +50,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="4"
+                    >
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/tv_type_of_Incoming"
@@ -65,7 +67,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -78,9 +80,8 @@
 
                         <RadioButton
                             android:id="@+id/rbSpent"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:checked="false"
                             android:text="@string/rb_spent" />
                     </RadioGroup>
@@ -91,7 +92,8 @@
                     android:id="@+id/cvDate"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contextClickable="true">
+                    android:contextClickable="true"
+                    >
 
                 </CalendarView>
 

@@ -47,7 +47,7 @@ public class FinanceAdapter extends RecyclerView.Adapter {
         Finance finance = finances.get(position);
 
 
-        financeViewHolder.tvDate.setText(finance.getData().format(DateTimeFormatter.ofPattern("YYYY/MM/dd kk:mm")));
+        financeViewHolder.tvDate.setText(finance.getData().format(DateTimeFormatter.ofPattern("YYYY/MM/dd")));
         financeViewHolder.tvValue.setText(String.valueOf(finance.getIncoming()));
         if(finance.getType() == SpendType.IN)
             financeViewHolder.ivSpentType.setImageResource(R.drawable.ic_gain);
@@ -57,7 +57,7 @@ public class FinanceAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return finances.size();
     }
 
     class FinanceViewHolder extends RecyclerView.ViewHolder{
