@@ -73,6 +73,7 @@ public class FinanceAdapter extends RecyclerView.Adapter {
             tvValue = itemView.findViewById(R.id.tvIncoming);
             ivSpentType = itemView.findViewById(R.id.ivTypeIncoming);
             ivRemove = itemView.findViewById(R.id.ivRemove);
+            ivRemove.setClickable(true);
         }
     }
 }

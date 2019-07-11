@@ -3,8 +3,6 @@ package senac.myfinances;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +14,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import java.util.List;
@@ -28,7 +26,7 @@ import senac.myfinances.adapters.FinanceAdapter;
 import senac.myfinances.models.Finance;
 import senac.myfinances.models.FinanceDB;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Finance>> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Finance>>{
 
     static FinanceDB financeDB;
     private RecyclerView rvIncoming;
@@ -62,6 +60,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         rvIncoming.setLayoutManager(layout);
 
 
+        Button btnNewIncoming = findViewById(R.id.btnNewIncoming);
+        btnNewIncoming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent novaFinance = new Intent(getBaseContext(), IncomingActivity.class);
+                startActivity(novaFinance);
+            }
+        });
+
+        /*
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(novaFinance);
             }
         });
+        */
     }
 
     @Override
@@ -94,9 +103,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public List<Finance> loadInBackground() {
                 List<Finance> listFinance = null;
                 try {
-                    listFinance = financeDB.select();
+                    listFinance = financeDB.read();
                 } catch (Exception e) {
-                    Log.e("listFinance",e.getMessage());
                     e.printStackTrace();
                 }
                 return listFinance;
@@ -131,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.

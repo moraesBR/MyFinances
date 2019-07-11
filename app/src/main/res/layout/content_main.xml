@@ -20,39 +20,69 @@
         android:visibility="gone"
         />
 
-    <ScrollView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="12dp"
+        style="@style/CardViewStyle"
         >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            >
 
-            <androidx.cardview.widget.CardView
+            <!--
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTitleIncoming"
+                style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:text="Incoming" />
+            -->
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/title"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                >
+
+                <Button
+                    android:id="@+id/btnNewIncoming"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Incoming"
-                    style="@style/TextAppearance.AppCompat.Large"
-                    />
+                    android:layout_centerInParent="true"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="New Incoming"
+                    android:textColor="#FFFFFF" />
 
-            </androidx.cardview.widget.CardView>
+            </RelativeLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvIncoming"
+            <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                android:layout_below="@+id/title"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
 
-        </LinearLayout>
-    </ScrollView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvIncoming"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </ScrollView>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

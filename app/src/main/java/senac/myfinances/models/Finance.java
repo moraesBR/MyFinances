@@ -1,7 +1,7 @@
 package senac.myfinances.models;
 import java.time.LocalDate;
 
-public class Finance {
+public class Finance implements Comparable<Finance>{
     private int id;
     private LocalDate data;
     private SpendType type;
@@ -31,5 +31,10 @@ public class Finance {
 
     public double getIncoming() {
         return incoming;
+    }
+
+    @Override
+    public int compareTo(Finance finance) {
+        return finance.data.compareTo(this.data);
     }
 }

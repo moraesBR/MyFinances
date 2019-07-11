@@ -10,6 +10,7 @@ import android.util.Log;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class FinanceDB extends SQLiteOpenHelper {
         }
     }
 
-    public List<Finance> select() throws Exception{
+    public List<Finance> read() throws Exception{
         Cursor cursor;
         String[] campos = {"id", "dia", "tipo", "valor"};
         SQLiteDatabase db = this.getReadableDatabase();
@@ -82,6 +83,7 @@ public class FinanceDB extends SQLiteOpenHelper {
         }
 
         db.close();
+        Collections.sort(finances);
         return finances;
     }
 
