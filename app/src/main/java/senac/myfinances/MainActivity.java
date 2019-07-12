@@ -1,6 +1,7 @@
 package senac.myfinances;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,12 +29,26 @@ import senac.myfinances.models.FinanceDB;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Finance>>{
 
-    static FinanceDB financeDB;
+    public static final int OPERATION_SEARCH_LOADER = 15;
+
+    public static FinanceDB financeDB;
     private RecyclerView rvIncoming;
     ProgressBar loading;
     LoaderManager loaderManager;
 
-    public static final int OPERATION_SEARCH_LOADER = 15;
+    /*private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //TODO: Step 4 of 4: Finally call getTag() on the view.
+            // This viewHolder will have all required values.
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+
+            int position = viewHolder.getAdapterPosition();
+
+            Comida comida = .get(position);
+
+        }
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +76,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         Button btnNewIncoming = findViewById(R.id.btnNewIncoming);
-        btnNewIncoming.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent novaFinance = new Intent(getBaseContext(), IncomingActivity.class);
-                startActivity(novaFinance);
-            }
+        btnNewIncoming.setOnClickListener(view -> {
+            Intent novaFinance = new Intent(getBaseContext(), IncomingActivity.class);
+            startActivity(novaFinance);
         });
 
         /*

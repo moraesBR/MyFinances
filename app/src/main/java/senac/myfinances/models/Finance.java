@@ -5,6 +5,7 @@ public class Finance implements Comparable<Finance>{
     private int id;
     private LocalDate data;
     private SpendType type;
+    private boolean isSelected = false;
     private double incoming;
 
     public Finance(int id, double incoming,SpendType type,LocalDate data) throws Exception {
@@ -31,6 +32,14 @@ public class Finance implements Comparable<Finance>{
 
     public double getIncoming() {
         return incoming;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 
     @Override
