@@ -93,7 +93,7 @@ public class FinanceDB extends SQLiteOpenHelper {
         Cursor cursor;
         String[] campos = {"id", "dia", "tipo", "valor"};
         SQLiteDatabase db = this.getReadableDatabase();
-        cursor = db.query("TB_FINANCE", campos, "date(dia) = strftime('%d/%m/%Y', ?)",
+        cursor = db.query("TB_FINANCE", campos, "dia = ?",
                 new String[]{data}, null, null, null, null);
 
         List<Finance> finances = new LinkedList<>();

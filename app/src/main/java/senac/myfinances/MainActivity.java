@@ -1,5 +1,7 @@
 package senac.myfinances;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,19 +17,25 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.SearchRecentSuggestions;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import senac.myfinances.adapters.FinanceAdapter;
 import senac.myfinances.models.Finance;
 import senac.myfinances.models.FinanceDB;
+import senac.myfinances.providers.FinanceSuggestionProvider;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Finance>>{
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Finance>> {
 
     public static final int OPERATION_SEARCH_LOADER = 15;
 
@@ -35,20 +43,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView rvIncoming;
     ProgressBar loading;
     LoaderManager loaderManager;
-
-    /*private View.OnClickListener onItemClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            //TODO: Step 4 of 4: Finally call getTag() on the view.
-            // This viewHolder will have all required values.
-            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
-
-            int position = viewHolder.getAdapterPosition();
-
-            Comida comida = .get(position);
-
-        }
-    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +75,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             startActivity(novaFinance);
         });
 
-        /*
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent novaFinance = new Intent(getBaseContext(), IncomingActivity.class);
-                startActivity(novaFinance);
-            }
-        });
-        */
     }
 
     @Override
@@ -108,16 +92,34 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @NonNull
     @Override
-    public Loader<List<Finance>> onCreateLoader (int id, @Nullable Bundle args) {
+    public Loader<List<Finance>> onCreateLoader(int id, @Nullable Bundle args) {
         return new AsyncTaskLoader<List<Finance>>(this) {
             @Nullable
             @Override
             public List<Finance> loadInBackground() {
                 List<Finance> listFinance = null;
-                try {
-                    listFinance = financeDB.read();
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                // Get the intent, verify the action and get the query
+                Intent intent = getIntent();
+                if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+                    String query = intent.getStringExtra(SearchManager.QUERY);
+
+                    SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getBaseContext(),
+                            FinanceSuggestionProvider.AUTHORITY, FinanceSuggestionProvider.MODE);
+                    suggestions.saveRecentQuery(query, null);
+
+                    try {
+                        Date dt = new SimpleDateFormat("yyyy/MM/dd").parse(query);
+                        listFinance = financeDB.select(new SimpleDateFormat("yyyy-MM-dd").format(dt));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        listFinance = financeDB.read();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 return listFinance;
             }
@@ -127,11 +129,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 loading.setVisibility(View.VISIBLE);
                 forceLoad();
             }
-        };
+        }
+
+                ;
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<List<Finance>> loader, List<Finance> data) {
+    public void onLoadFinished
+            (@NonNull Loader<List<Finance>> loader, List<Finance> data) {
         loading.setVisibility(View.GONE);
 
         rvIncoming.setAdapter(new FinanceAdapter(data, this));
@@ -147,6 +152,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default
+
+
         return true;
     }
 
@@ -158,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_settings) {
             return true;
         }
 
